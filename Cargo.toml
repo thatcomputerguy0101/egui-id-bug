@@ -5,12 +5,16 @@ edition = "2021"
 
 [dependencies]
 pollster = "^0.3.0"
-three-d = { version = "^0.17.0", features = ["egui-gui"] }
+three-d = { version="^0.18.0", features=["egui-gui"] }
+three-d-asset = "^0.7.0"
 env_logger = { version = "^0.11.5", default-features = false, features = [
     "auto-color",
     "humantime",
 ] }
-lens-rs = "^0.3.2"
 
 [package.metadata.inwelling]
 lens-rs_generator = true
+
+[patch.crates-io]
+three-d = { path = "../three-d" }
+three-d-asset = { path = "../three-d-asset" }
