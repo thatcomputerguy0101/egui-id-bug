@@ -5,7 +5,7 @@ fn main() {
     pollster::block_on(run());
 }
 
-fn main_panel<'a>(inspector_visible: &'a mut bool) -> impl FnMut(&mut egui::Ui) -> () + 'a {
+fn main_panel<'a>(inspector_visible: &'a mut bool, ids: &'a mut [egui::Id]) -> impl FnMut(&mut egui::Ui) -> () + 'a {
     move |ui| {
         let response = ui
             .horizontal(|ui| {
@@ -17,13 +17,18 @@ fn main_panel<'a>(inspector_visible: &'a mut bool) -> impl FnMut(&mut egui::Ui) 
             response.show_tooltip_text("Test");
         }
 
-        ui.checkbox(inspector_visible, "Show Inpsector");
+        let inspector_id = ui.checkbox(inspector_visible, "Show Inpsector").id;
 
-        ui.horizontal(|ui| ui.label("Hovering over this label shows the tooltip"));
-        // ui.collapsing(
+        let horizontal_id = ui.horizontal(|ui| ui.label(format!("Hovering over this label shows the tooltip, these ID's were involved: {:?}", ids))).response.id;
+        // let collapsing_id = ui.collapsing(
         //     "Using this instead of horizontal also triggers the problem",
         //     |_| (),
-        // );
+        // ).header_response.id;
+
+        ids[0] = response.id;
+        ids[1] = inspector_id;
+        ids[2] = horizontal_id;
+        // ids[3] = collapsing_id;
     }
 }
 
@@ -39,6 +44,7 @@ async fn run() {
     let context = window.gl();
 
     let mut inspector_visible = false;
+    let mut ids = [egui::Id::NULL; 4];
 
     let mut gui = GUI::new(&context);
 
@@ -54,7 +60,7 @@ async fn run() {
                 frame_input.device_pixel_ratio,
                 |gui_context| {
                     use three_d::egui::*;
-                    let panel_response = CentralPanel::default().show(gui_context, main_panel(&mut inspector_visible));
+                    let panel_response = CentralPanel::default().show(gui_context, main_panel(&mut inspector_visible, &mut ids));
                     panel_width = panel_response.response.rect.width();
 
                     egui::Window::new("🔍 Inspection")
