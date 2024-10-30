@@ -11,3 +11,6 @@ env_logger = { version = "^0.11.5", default-features = false, features = [
     "humantime",
 ] }
 lens-rs = "^0.3.2"
+
+[package.metadata.inwelling]
+lens-rs_generator = true
