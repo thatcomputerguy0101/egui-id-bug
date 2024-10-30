@@ -16,5 +16,4 @@ env_logger = { version = "^0.11.5", default-features = false, features = [
 lens-rs_generator = true
 
 [patch.crates-io]
-three-d = { path = "../three-d" }
-three-d-asset = { path = "../three-d-asset" }
+three-d = { git = "https://github.com/asny/three-d.git" } # Using repo directly for an up-to-date version of egui

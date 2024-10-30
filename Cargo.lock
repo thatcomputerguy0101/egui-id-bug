@@ -1202,6 +1202,7 @@ dependencies = [
 [[package]]
 name = "three-d"
 version = "0.18.0"
+source = "git+https://github.com/asny/three-d.git#fd60174da426c03e9192a8a7328a4a94240d3486"
 dependencies = [
  "cgmath",
  "egui",
@@ -1224,6 +1225,8 @@ dependencies = [
 [[package]]
 name = "three-d-asset"
 version = "0.7.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8207e9cdb58d83b02b320412d75ba6503d718f0cafa37de9cf0511839f3d86e1"
 dependencies = [
  "cgmath",
  "half",

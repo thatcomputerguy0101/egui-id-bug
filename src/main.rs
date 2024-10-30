@@ -5,13 +5,13 @@ fn main() {
     pollster::block_on(run());
 }
 
-fn settings_panel<'a>(
-    inspector_visible: &'a mut bool,
-) -> impl FnMut(&mut egui::Ui) -> () + 'a {
+fn main_panel<'a>(inspector_visible: &'a mut bool) -> impl FnMut(&mut egui::Ui) -> () + 'a {
     move |ui| {
-        let response = ui.horizontal(|ui| {
-            ui.label("This label has the tooltip, but does not show it when hovered over");
-        }).response;
+        let response = ui
+            .horizontal(|ui| {
+                ui.label("This label has the tooltip, but does not show it when hovered over");
+            })
+            .response;
 
         if response.contains_pointer() {
             response.show_tooltip_text("Test");
@@ -20,6 +20,10 @@ fn settings_panel<'a>(
         ui.checkbox(inspector_visible, "Show Inpsector");
 
         ui.horizontal(|ui| ui.label("Hovering over this label shows the tooltip"));
+        // ui.collapsing(
+        //     "Using this instead of horizontal also triggers the problem",
+        //     |_| (),
+        // );
     }
 }
 
@@ -27,7 +31,7 @@ async fn run() {
     env_logger::init(); // Log to stderr (if you run with `RUST_LOG=debug`).
 
     let window = Window::new(WindowSettings {
-        title: "Egui bug demo?".to_string(),
+        title: "Egui bug demo".to_string(),
         max_size: Some((1280, 720)),
         ..Default::default()
     })
@@ -50,15 +54,15 @@ async fn run() {
                 frame_input.device_pixel_ratio,
                 |gui_context| {
                     use three_d::egui::*;
-                    let panel_response = CentralPanel::default().show(gui_context, settings_panel(&mut inspector_visible));
+                    let panel_response = CentralPanel::default().show(gui_context, main_panel(&mut inspector_visible));
                     panel_width = panel_response.response.rect.width();
 
-                egui::Window::new("🔍 Inspection")
-                    .open(&mut inspector_visible)
-                    .vscroll(true)
-                    .show(gui_context, |ui| {
-                        gui_context.inspection_ui(ui);
-                    });
+                    egui::Window::new("🔍 Inspection")
+                        .open(&mut inspector_visible)
+                        .vscroll(true)
+                        .show(gui_context, |ui| {
+                            gui_context.inspection_ui(ui);
+                        });
                 },
             );
 
