@@ -31,7 +31,7 @@ async fn run() {
     env_logger::init(); // Log to stderr (if you run with `RUST_LOG=debug`).
 
     let window = Window::new(WindowSettings {
-        title: "Egui bug demo".to_string(),
+        title: "Egui id bug demo".to_string(),
         max_size: Some((1280, 720)),
         ..Default::default()
     })
